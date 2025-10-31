@@ -1,0 +1,161 @@
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f8fafc;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    color: #1e293b;
+
+}
+
+h3 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #0f172a;
+}
+
+#status {
+    margin: 10px 0 20px;
+    font-weight: 500;
+}
+
+#statusText.ok {
+    color: #15803d;
+}
+
+#statusText.error {
+    color: #b91c1c;
+}
+
+#startBtn {
+    background: #1d4ed8;
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background 0.2s;
+}
+
+#startBtn:hover {
+    background: #1e40af;
+}
+
+#highestContainer {
+    margin: 15px auto;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1e3a8a;
+}
+
+#outputBox {
+    margin: 20px auto;
+    font-size: 1.3rem;
+    font-weight: 600;
+    padding: 12px 16px;
+    border: 2px solid #334155;
+    border-radius: 6px;
+    min-width: 250px;
+    background: #ffffff;
+    color: #0f172a;
+    display: inline-block;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.btn {
+    margin: 6px;
+    padding: 10px 18px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+#saveBtn {
+    background: #2563eb;
+    color: #fff;
+}
+#saveBtn:hover {
+    background: #1e40af;
+}
+
+#spaceBtn {
+    background: #64748b;
+    color: #fff;
+}
+#spaceBtn:hover {
+    background: #475569;
+}
+
+#backspaceBtn {
+    background: #dc2626;
+    color: #fff;
+}
+#backspaceBtn:hover {
+    background: #991b1b;
+}
+
+#resetBtn {
+    background: #f59e0b;
+    color: #fff;
+}
+#resetBtn:hover {
+    background: #b45309;
+}
+
+#suggestions {
+    margin-top: 20px;
+    padding: 10px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    display: inline-block;
+    max-width: 400px;
+}
+
+#suggestions strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #0f172a;
+    font-size: 1rem;
+}
+
+.suggestion {
+    display: inline-block;
+    background: #e2e8f0;
+    padding: 6px 12px;
+    margin: 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.suggestion:hover {
+    background: #cbd5e1;
+}
+
+#webcam-container {
+    margin-top: 10px;
+}
+
+#webcam-container canvas {
+    border: 2px solid #334155;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+#label-container {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #334155;
+}
+
+#label-container > div {
+    margin: 3px 0;
+}

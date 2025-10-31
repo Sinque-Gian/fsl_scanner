@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>FSL</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h3>Filipino Sign Language</h3>
+    <a href="team.html" class="btn" style="color: gray; text-decoration:none;">
+      Developers
+    </a>
+    <div id="status">Status: <span id="statusText">idle</span></div>
+    <button id="startBtn" class="btn">Start</button>
+    <div id="webcam-container"></div>
+
+    <div id="highestContainer">Detected: -</div>
+    <div id="alternativesContainer">Possible: -</div>
+
+
+    <!-- Output sentence -->
+    <div id="outputBox"></div>
+    <br />
+    <div class="button-group">
+      <button id="saveBtn" class="btn">Save Letter</button>
+      <button id="spaceBtn" class="btn">Space</button>
+      <button id="backspaceBtn" class="btn">Backspace</button>
+      <button id="resetBtn" class="btn">Reset</button>
+    </div>
+    <!-- Suggestions -->
+    <div id="suggestions">
+      <strong>Suggestions:</strong>
+      <div id="suggestionList"></div>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+    <script>
+      // const URL = "https://teachablemachine.withgoogle.com/models/hE_QN1-8T/";
+      const URL = "https://teachablemachine.withgoogle.com/models/DuSjp3YQl/";
+      let model, webcam, maxPredictions;
+      const statusText = document.getElementById("statusText");
+      const startBtn = document.getElementById("startBtn");
+      const highestContainer = document.getElementById("highestContainer");
+      const outputBox = document.getElementById("outputBox");
+      const saveBtn = document.getElementById("saveBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const backspaceBtn = document.getElementById("backspaceBtn");
+      const suggestionList = document.getElementById("suggestionList");
+
+      let detectedLetter = "";
+      let savedText = "";
+
+      startBtn.addEventListener("click", init);
+
+      function setStatus(text, cls) {
+        statusText.textContent = text;
+        statusText.className = cls || "";
+        console.log("[STATUS]", text);
+      }
+      const spaceBtn = document.getElementById("spaceBtn");
+
+      spaceBtn.addEventListener("click", () => {
+        savedText += " ";
+        outputBox.textContent = savedText;
+        fetchSuggestions(savedText.trim()); // update suggestions ignoring trailing spaces
+      });
+
+      async function init() {
+        setStatus("Starting...");
+        try {
+          const modelURL = URL + "model.json";
+          const metadataURL = URL + "metadata.json";
+          setStatus("Loading model...");
+          model = await tmImage.load(modelURL, metadataURL);
+          maxPredictions = model.getTotalClasses();
+
+          setStatus("Setting up webcam...");
+          webcam = new tmImage.Webcam(320, 320, true);
+
+          try {
+            await webcam.setup({ facingMode: "user" });
+          } catch (camErr) {
+            console.error("Webcam error details:", camErr);
+            throw new Error("Webcam setup failed. " + camErr.message);
+          }
+
+          await webcam.play();
+          const container = document.getElementById("webcam-container");
+          container.innerHTML = "";
+          container.appendChild(webcam.canvas);
+
+         
+          setStatus("Running predictions", "ok");
+          window.requestAnimationFrame(loop);
+
+          // Update detected letter every 1 second
+          setInterval(showHighestPrediction, 1000);
+        } catch (err) {
+          console.error(err);
+          setStatus("Error: " + (err.message || err), "error");
+          alert(
+            "Error: " + (err.message || err) + "\nSee console for details."
+          );
+        }
+      }
+
+      async function loop() {
+        webcam.update();
+        await predict();
+        window.requestAnimationFrame(loop);
+      }
+
+      let lastPredictions = [];
+
+      async function predict() {
+        if (!model) return;
+        const prediction = await model.predict(webcam.canvas);
+        lastPredictions = prediction;
+
+        // Show all probabilities
+        for (let i = 0; i < maxPredictions; i++) {
+          const classPrediction =
+            prediction[i].className +
+            ": " +
+            prediction[i].probability.toFixed(2);
+          
+        }
+      }
+
+      function showHighestPrediction() {
+        if (!lastPredictions || lastPredictions.length === 0) return;
+
+        // Sort predictions by probability (highest first)
+        const sorted = [...lastPredictions].sort(
+          (a, b) => b.probability - a.probability
+        );
+
+        // Highest detected
+        const highest = sorted[0];
+        detectedLetter = highest.className;
+        highestContainer.textContent = "Detected: " + highest.className;
+
+        // Next 3 alternatives (clickable)
+        const alternativesDiv = document.getElementById("alternativesContainer");
+        alternativesDiv.innerHTML = "Possible: ";
+
+        const alternatives = sorted.slice(1, 4);
+        alternatives.forEach(p => {
+          const span = document.createElement("span");
+          span.textContent = p.className;
+          span.style.cursor = "pointer";
+          span.style.marginRight = "10px";
+          span.style.padding = "6px 10px";
+          span.style.backgroundColor = "#e0e7ff"; // light blue
+          span.style.color = "blue";
+
+          // Click to add to output box
+          span.addEventListener("click", () => {
+            savedText += p.className;
+            outputBox.textContent = savedText;
+            fetchSuggestions(savedText);
+          });
+
+          alternativesDiv.appendChild(span);
+        });
+      }
+
+
+
+      // --- Button actions ---
+      saveBtn.addEventListener("click", () => {
+        if (detectedLetter) {
+          savedText += detectedLetter;
+          outputBox.textContent = savedText;
+          fetchSuggestions(savedText);
+        }
+      });
+
+      resetBtn.addEventListener("click", () => {
+        savedText = "";
+        outputBox.textContent = savedText;
+        suggestionList.innerHTML = "";
+      });
+
+      backspaceBtn.addEventListener("click", () => {
+        savedText = savedText.slice(0, -1);
+        outputBox.textContent = savedText;
+        fetchSuggestions(savedText);
+      });
+
+      // --- Fetch word suggestions from API ---
+      async function fetchSuggestions(prefix) {
+        if (!prefix) {
+          suggestionList.innerHTML = "";
+          return;
+        }
+
+        try {
+          const res = await fetch(
+            `https://api.datamuse.com/words?sp=${prefix}*`
+          );
+          const data = await res.json();
+
+          suggestionList.innerHTML = "";
+          data.slice(0, 5).forEach((item) => {
+            const wordDiv = document.createElement("div");
+            wordDiv.className = "suggestion";
+            wordDiv.textContent = item.word;
+            wordDiv.addEventListener("click", () => {
+              savedText = item.word;
+              outputBox.textContent = savedText;
+              suggestionList.innerHTML = "";
+            });
+            suggestionList.appendChild(wordDiv);
+          });
+        } catch (err) {
+          console.error("Suggestion fetch failed:", err);
+        }
+      }
+    </script>
+  </body>
+</html>

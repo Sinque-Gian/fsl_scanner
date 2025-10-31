@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capstone Project Group</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f8fafc;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      color: #1e293b;
+    }
+
+    header {
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      margin-top: 8px;
+      color: #475569;
+    }
+
+    .row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+
+    .card {
+      background: #ffffff;
+      width: 260px;
+      padding: 24px;
+      text-align: center;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .card img {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      margin-bottom: 16px;
+      border: 3px solid #1d4ed8; /* blue */
+      object-fit: cover;
+    }
+
+    .card h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0;
+      color: #0f172a;
+    }
+
+    .role {
+      color: #1d4ed8;
+      font-weight: 600;
+      margin: 6px 0;
+    }
+
+    .desc {
+      font-size: 0.9rem;
+      color: #334155;
+      margin-top: 6px;
+    }
+    a{
+      text-decoration: none;
+    }
+    h1:hover{
+      color: #1d4ed8;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <a href="index.html" ><h1>Capstone Project Group</h1></a>
+    <p>Meet Our Team</p>
+  </header>
+
+  <!-- Team Section -->
+  <main>
+    <!-- Top row: 2 Developers -->
+    <div class="row">
+      <div class="card">
+        <img src="gian.jpg" alt="Developer">
+        <h2>Gian Sinque</h2>
+        <p class="role">Developer</p>
+        <p class="desc">Focused on system design, database, and backend development.</p>
+      </div>
+
+      <div class="card">
+        <img src="lor.jpg" alt="Developer">
+        <h2>Lorence Vergara</h2>
+        <p class="role">Developer</p>
+        <p class="desc">Handles frontend development and user interface design.</p>
+      </div>
+    </div>
+
+    <!-- Bottom row: 3 Documenters -->
+    <div class="row">
+      <div class="card">
+        <img src="dwayne.jpg" alt="Documenter">
+        <h2>Godwayne Mabunga</h2>
+        <p class="role">Documentation Specialist</p>
+        <p class="desc">Prepares research papers, system documentation, and project reports.</p>
+      </div>
+
+      <div class="card">
+        <img src="dave.jpg" alt="Documenter">
+        <h2>Erick Dave Alva</h2>
+        <p class="role">Documentation Specialist</p>
+        <p class="desc">Responsible for formatting, editing, and compiling project documents.</p>
+      </div>
+
+      <div class="card">
+        <img src="mj.jpg" alt="Documenter">
+        <h2>Mike Joseph Santillan</h2>
+        <p class="role">Documentation Specialist</p>
+        <p class="desc">In charge of research documentation and meeting minutes.</p>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
